@@ -6,6 +6,9 @@
 
 from pydantic import BaseModel
 from typing import List
+from routers import tasks
+app.include_router(tasks.riuter)
+
 
 class Task(BaseModel):
     id: int
