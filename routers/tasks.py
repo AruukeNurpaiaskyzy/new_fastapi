@@ -12,7 +12,13 @@ class TaskResponse(BaseModel):
     title:str
     description:str
     completed:bool
+task_db = []
+current_id = 1
 
-@router.get("/")
+@router.get("/", response_model=List[TaskResponse])
 def get_tasks():
-    return[{"id": 1, "title": "Learn FastAPI"}]
+    return task_db
+
+@router.post("/", response_model=dict)
+
+
