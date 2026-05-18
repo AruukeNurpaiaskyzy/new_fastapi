@@ -28,16 +28,3 @@ async def root():
 
 
 
-class Task(BaseModel):
-    id: int
-    title: str
-    completed: bool=False
-
-task_db = []
-@app.post("tasks/", response_model = Task)
-def create_task(task: Task):
-    tasks_db.append(task)
-    return task
-@app.get("tasks/", response_model=List(Task))
-def get_task():
-    return tasks_db
