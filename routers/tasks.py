@@ -38,5 +38,13 @@ def get_task(task_id:int):
             return task
     raise HTTPException(status_code = 404, detail = "the task is not found " )
     
-    
-    
+@router.delete("/{task_id}")
+def delete_task(task_id: int):
+    global tasks_db
+    for i, task in enumerate(tasks_db):
+        if task.id==task_id:
+           tasks_db.pop(i)
+        return {"message": "the task is deleted"}
+    raise HTTPException(status_code=404, detail="the task is not found")
+
+@
