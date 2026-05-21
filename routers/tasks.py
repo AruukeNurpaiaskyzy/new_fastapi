@@ -47,4 +47,11 @@ def delete_task(task_id: int):
         return {"message": "the task is deleted"}
     raise HTTPException(status_code=404, detail="the task is not found")
 
-@
+@router.put("/{task_id}")
+def update_task(task_id:int, task_update: TaskCreate):
+    for task in tasks_db:
+        if task.id == task_id:
+            task.title = task_update.title
+            task.description = task_update.description or ""
+            return {"message": "the task is updated", "task": task.dict()}
+    raise HTTPException(status_code=404, detail="the task is not found")
