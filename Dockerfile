@@ -14,9 +14,6 @@ COPY requirements.txt .
 RUN pip install --no-cache-dir \
     --default-timeout=100 \
     --retries=10 \
-    --index-url https://pypi.org/simple/ \
-    --extra-index-url https://mirrors.aliyun.com/pypi/simple/ \
-    --trusted-host mirrors.aliyun.com \
     -r requirements.txt
 
 # Копируем весь проект
