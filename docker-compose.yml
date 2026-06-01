@@ -1,0 +1,46 @@
+version: '3.8'
+
+services:
+  # FastAPI приложение
+  web:
+    build: .
+    ports:
+      - "8000:8000"
+    depends_on:
+      - redis
+      - celery_worker
+    environment:
+      - REDIS_URL=redis://redis:6379/0
+    command: uvicorn main:app --host 0.0.0.0 --port 8000 --reload
+    volumes:
+      - .:/app
+
+  # Redis (очередь задач)
+  redis:
+    image: redis:7-alpine
+    ports:
+      - "6379:6379"
+    restart: always
+
+  # Celery Worker (выполняет фоновые задачи)
+  celery_worker:
+    build: .
+    command: celery -A celery_app worker --loglevel=info
+    depends_on:
+      - redis
+    environment:
+      - REDIS_URL=redis://redis:6379/0
+    volumes:
+      - .:/app
+
+  # Celery Beat (планировщик периодических задач, ОПЦИОНАЛЬНО)
+  celery_beat:
+    build: .
+    command: celery -A celery_app beat --loglevel=info
+    depends_on:
+      - redis
+      - celery_worker
+    environment:
+      - REDIS_URL=redis://redis:6379/0
+    volumes:
+      - .:/app
