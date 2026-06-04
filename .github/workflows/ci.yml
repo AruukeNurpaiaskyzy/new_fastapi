@@ -1,0 +1,29 @@
+# .github/workflows/ci.yml
+name: CI / Tests
+
+on:
+  push:
+    branches: [ main, develop ]  # Когда пушим в эти ветки
+  pull_request:
+    branches: [ main ]           # И когда создаем Pull Request
+
+jobs:
+  test:
+    runs-on: ubuntu-latest       # Бежим на свежей Ubuntu
+    
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4  # Скачать код из репозитория
+    
+    - name: Setup Python
+      uses: actions/setup-python@v5
+      with:
+        python-version: '3.11'
+    
+    - name: Install dependencies
+      run: |
+        pip install -r requirements.txt
+        pip install pytest
+    
+    - name: Run tests
+      run: pytest tests/         # Вот это и есть CI — запуск тестов!
